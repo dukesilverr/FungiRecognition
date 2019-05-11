@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+{% block content %}
+    <h2>Prediction results</h2>
+    <br>
+    <table class="table" id="results-table">
+        <tr class="first-table-line">
+            <th>Image</th>
+            <th>Prediction</th>
+            <th>Score</th>
+        </tr>
+        {% for prediction in predictions %}
+            <tr class="other-table-lines">
+                <th>
+                    <figure>
+                        <img src="{{prediction.source}}" />
+                        <figcaption>{{prediction.image_name}}</figcaption>
+                    </figure>
+                </th>
+                <th>
+                    {{prediction.label}} | {{ prediction.label_lt }}
+                    <br>
+                      <button type="button" class="btn read-more" data-toggle="collapse" data-target="#{{ prediction.id }}">Read more...</button>
+                      <div id="{{ prediction.id }}" class="collapse read-more">
+                    {{ prediction.about }}
+                      </div>
+                </th>
+                <th>
+                    {{prediction.score}} %
+                </th>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
