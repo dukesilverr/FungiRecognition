@@ -77,7 +77,7 @@ def submit_file_for_prediction():
         start_time = time.time()
         predictions = []
         print(len(request.files.getlist('images')))
-        if len(request.files.getlist('images')) > 300:
+        if len(request.files.getlist('images')) > 30:
             error = 'Only 30 images are allowed for prediction.'
             flash(error)
             return redirect(url_for('submit_file_for_prediction'))
