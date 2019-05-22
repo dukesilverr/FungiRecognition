@@ -78,7 +78,7 @@ def submit_file_for_prediction():
         predictions = []
         print(len(request.files.getlist('images')))
         if len(request.files.getlist('images')) > 300:
-            error = 'Only 300 of images allowed for prediction.'
+            error = 'Only 30 images are allowed for prediction.'
             flash(error)
             return redirect(url_for('submit_file_for_prediction'))
         for file in request.files.getlist('images'):
