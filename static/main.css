@@ -21,6 +21,12 @@ body {
     margin: auto;
 }
 
+.file_error_message {
+    font-size: 25px;
+    color: red;
+}
+
+
 th {
     width: 30%;
     font-weight: 400;
