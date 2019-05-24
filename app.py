@@ -51,7 +51,7 @@ def predict(file):
     print(gg.argmax(axis=-1))
     classes = gg.argmax(axis=-1)[0]
     procent = round(gg[0, classes] * 100, 2)
-    labels = ["Agaricus","Amanita","Boletus","Cortinarius", "Entoloma", "Hygrocybe", "Lactarius", "Not fungi", "Russula", "Suillus"]
+    labels = ["Agaricus","Amanita","Boletus","Cantharellus","Cortinarius", "Hygrocybe", "Lactarius", "Not fungi", "Russula", "Suillus"]
     predicted_label = sorted(labels)[classes]
     return predicted_label, procent
 
