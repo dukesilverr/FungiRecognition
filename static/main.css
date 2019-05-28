@@ -5,6 +5,10 @@ body {
     background-position: center center;
 }
 
+#bachelor-thesis {
+	margin-top: 5%;
+}
+
 .active {
   border: 5px solid red;
 }
@@ -49,7 +53,7 @@ img {
 
 h1 {
     font-weight: 500;
-    margin-top: 20%;
+    margin-top: 15%;
     margin-bottom: 8%;
     font-size: 56px;
 }
