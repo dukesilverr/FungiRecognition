@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-  <script src="/static/main.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="/static/main.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet">
 </head>
+
 <title>Fungi recognition</title>
-<!-- stylesheets -->
-<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet">
+<div id="top-buttons">
+	<button type="button" id="en" onclick="window.location.href='/en';"></button>
+	<button type="button" id="lt" onclick="window.location.href='/lt';"></button>
+</div>
 <div id="content">
   <div class="selection">
-    <h2 id="bachelor-thesis">&copy; Bachelor thesis by Dovilė Patiejūnaitė</h2>
-    <h1>Discover fungi genus by uploading a photo!</h1>
-    <h2>This prediction will allow to distinguish 9 common European fungi:
-      Agaricus, Amanita, Boletus, Curtinarius, Cantharellus, Hygrocybe, Lactarius, Russula and Suillus</h2>
+    <h2 id="bachelor-thesis">&copy;{{copyrights}}</h2>
+    <h1>{{h1}}</h1>
+    <h2>{{h2}}</h2>
     <br>
     <form action="" method=post enctype=multipart/form-data>
-      <input type=file name=images multiple id="file-input" data-multiple-caption="{count} files selected" class="inputfile inputfile-1">
+      <input type=file name=images multiple id="file-input" data-multiple-caption="{count} files selected">
       <label for="file-input">
         <svg xmlns="http://www.w3.org/2000/svg"
             width="20" height="17" viewBox="0 0 20 17">
           <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z">
           </path>
         </svg>
-        <span>Choose a file&hellip;</span>
+        <span>{{choose_file}}&hellip;</span>
       </label>
-      <input type=submit value=SUBMIT id="submit_button" class="btn">
+      <input type=submit value={{submit}} id="submit_button" class="btn">
     </form>
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -38,7 +40,38 @@
             {% endfor %}
           {% endif %}
     {% endwith %}
-    {% block content %}{% endblock %}
+    {% if render_results %}
+        <h2>{{results}}</h2>
+        <br>
+        <table class="table" id="results-table">
+            <tr class="first-table-line">
+                <th>{{image}}</th>
+                <th>{{prediction}}</th>
+                <th>{{score}}</th>
+            </tr>
+            {% for prediction in predictions %}
+                <tr class="other-table-lines">
+                    <th>
+                        <figure>
+                            <img src="{{prediction.source}}" />
+                            <figcaption>{{prediction.image_name}}</figcaption>
+                        </figure>
+                    </th>
+                    <th>
+                        {{prediction.label}}
+                        <br>
+                          <button type="button" class="btn read-more" data-toggle="collapse" data-target="#{{ prediction.id }}">{{read_more}}</button>
+                          <div id="{{ prediction.id }}" class="collapse read-more">
+                            {{ prediction.about }}
+                          </div>
+                    </th>
+                    <th>
+                        {{prediction.score}} %
+                    </th>
+                </tr>
+            {% endfor %}
+        </table>
+      {% endif %}
   </div>
 </div>
 </html>

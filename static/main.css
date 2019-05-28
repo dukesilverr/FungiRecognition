@@ -4,6 +4,28 @@ body {
     background-attachment: fixed;
     background-position: center center;
 }
+#top-buttons {
+    text-align: right;
+    margin: 10px;
+}
+#en {
+  background-image: url('en.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 40px;
+  width: 65px;
+  border: none;
+}
+
+
+#lt {
+  background-image: url('lt.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 40px;
+  width: 65px;
+  border: none;
+}
 
 #bachelor-thesis {
 	margin-top: 5%;
@@ -17,7 +39,7 @@ body {
     padding: 1% 1%;
 }
 #content {
-   margin: 0 auto; /* Center in other browsers */
+   margin: 0 auto;
    text-align: center;
 }
 .selection {
