@@ -22,7 +22,7 @@ config.read('label.properties')
 
 
 # loading model
-model = load_model('classifier1.h5')
+model = load_model('classifier.h5')
 model._make_predict_function()
 configTf = tf.ConfigProto()
 configTf.gpu_options.allow_growth = True
@@ -39,6 +39,7 @@ LABELS = sorted(["Agaricus","Amanita","Boletus","Cantharellus","Cortinarius", "H
                  "Not fungi", "Russula", "Suillus"])
 
 
+# DTO for result table information
 class Prediction:
     def __init__(self, source, label, image_name, score, about):
         self.source = source
@@ -54,18 +55,17 @@ def predict(file):
     img = Image.open(buf)
     img = img.resize((IMAGE_RESIZE, IMAGE_RESIZE))
     x = image.img_to_array(img)
-    x = x[..., :3]
+    x = x[..., :3]  # in case of 4-channel image (jpeg, png transperancy layer)
     x = np.expand_dims(x, axis=0)
-    print(x.shape)
     x = preprocess_input(x)
     gg = model.predict(x)
-    print(gg.argmax(axis=-1))
     classes = gg.argmax(axis=-1)[0]
     percent = round(gg[0, classes] * 100, 2)
     predicted_label = LABELS[classes]
     return predicted_label, percent
 
 
+# prevent selecting other files
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
@@ -73,7 +73,7 @@ def allowed_file(filename):
 
 @app.route("/", methods=['GET'])
 def redirec_to_en():
-    return redirect('/en')
+    return redirect('/en')  # redirect to default app language
 
 
 @app.route("/<lang>", methods=['GET'])
@@ -82,21 +82,19 @@ def reload(lang):
         abort(404)
     return render_template('index.html', copyrights=config.get(lang, 'copyrights'), h1=config.get(lang, 'h1'),
                            h2=config.get(lang, 'h2'), choose_file=config.get(lang, 'choose_file'),
-                           submit=config.get(lang, 'submit'), render_results=False)
+                           submit=config.get(lang, 'submit'), title=config.get(lang, 'title'),  render_results=False)
 
 
 @app.route('/<lang>', methods=['POST'])
 def submit_file_for_prediction(lang):
     if request.method == 'POST':
-        print("1OPA")
         predictions = []
         if len(request.files.getlist('images')) > 30:
             flash(config.get(lang, 'error_30'))
             return redirect(url_for('submit_file_for_prediction'), lang=lang)
         for file in request.files.getlist('images'):
-            print("RADOM")
             file_content = file.read()
-            file_b64 = base64.b64encode(file_content).decode('ascii')
+            file_b64 = base64.b64encode(file_content).decode('ascii')  # show selected images without saving
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 label, percent = predict(file_content)
@@ -112,9 +110,9 @@ def submit_file_for_prediction(lang):
                                choose_file=config.get(lang, 'choose_file'), submit=config.get(lang, 'submit'),
                                prediction=config.get(lang, 'prediction'), score=config.get(lang, 'score'),
                                results=config.get(lang, 'results'), image=config.get(lang, 'image'),
-                               read_more=config.get(lang, 'read_more'), render_results=True)
+                               read_more=config.get(lang, 'read_more'), title=config.get(lang, 'title'), render_results=True)
 
 
 if __name__ == "__main__":
-    app.debug=True
+    app.debug=False
     app.run(host='0.0.0.0')
