@@ -91,7 +91,7 @@ def submit_file_for_prediction(lang):
         predictions = []
         if len(request.files.getlist('images')) > 30:
             flash(config.get(lang, 'error_30'))
-            return redirect(url_for('submit_file_for_prediction'), lang=lang)
+            return redirect(url_for('submit_file_for_prediction', lang=lang))
         for file in request.files.getlist('images'):
             file_content = file.read()
             file_b64 = base64.b64encode(file_content).decode('ascii')  # show selected images without saving
