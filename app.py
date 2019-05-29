@@ -54,8 +54,9 @@ def predict(file):
     img = Image.open(buf)
     img = img.resize((IMAGE_RESIZE, IMAGE_RESIZE))
     x = image.img_to_array(img)
-
+    x = x[..., :3]
     x = np.expand_dims(x, axis=0)
+    print(x.shape)
     x = preprocess_input(x)
     gg = model.predict(x)
     print(gg.argmax(axis=-1))
@@ -84,14 +85,16 @@ def reload(lang):
                            submit=config.get(lang, 'submit'), render_results=False)
 
 
-@app.route('/<lang>', methods=['POST', 'GET'])
+@app.route('/<lang>', methods=['POST'])
 def submit_file_for_prediction(lang):
     if request.method == 'POST':
+        print("1OPA")
         predictions = []
         if len(request.files.getlist('images')) > 30:
             flash(config.get(lang, 'error_30'))
             return redirect(url_for('submit_file_for_prediction'), lang=lang)
         for file in request.files.getlist('images'):
+            print("RADOM")
             file_content = file.read()
             file_b64 = base64.b64encode(file_content).decode('ascii')
             if file and allowed_file(file.filename):
@@ -113,5 +116,5 @@ def submit_file_for_prediction(lang):
 
 
 if __name__ == "__main__":
-    app.debug=False
+    app.debug=True
     app.run(host='0.0.0.0')
