@@ -35,7 +35,7 @@ ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png']
 ALLOWED_LANGUAGES = ['en', 'lt']
 IMAGE_RESIZE = 256
 IMAGE_LIMIT = 300
-LABELS = sorted(["Agaricus","Amanita","Boletus","Cantharellus","Cortinarius", "Hygrocybe", "Lactarius",
+LABELS = sorted(["Agaricus", "Amanita", "Boletus", "Cantharellus", "Cortinarius", "Hygrocybe", "Lactarius",
                  "Not fungi", "Russula", "Suillus"])
 
 
