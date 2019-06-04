@@ -1,8 +1,8 @@
 ## 
 ## Fungi classification web app based on Keras and Flask
 ## 
-## To run this system locally, docker and docker-compose should be installed
-## Commands to start the app:
+#### To run this system locally, docker and docker-compose should be installed
+#### Commands to start the app:
 
 docer-compose build
 docker-compose up
